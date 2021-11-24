@@ -124,3 +124,14 @@ def upload_artifact(
     n_url = urljoin(client.galaxy_root, f"content/inbound-{artifact.namespace}/v3/artifacts/collections/")
     resp = client._http("post", n_url, data=data, headers=headers)
     return resp
+
+
+def get_last_created_collection_from_repository(client, repository_name):
+    """
+    Returns the data of the last created collection with repository
+    :param client: a GalaxyClient object. Must be authenticated.
+    :param repository_name: a String obj, can be staging, published ...
+    :return: CollectionVersions object
+    """
+    collection_url = f"_ui/v1/collection-versions/?sort=-pulp_created&repository={repository_name}"
+    return client.get(collection_url)["data"][0]
